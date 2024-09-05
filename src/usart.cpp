@@ -5,16 +5,7 @@
 //#define PIN_RX         PIN2_bm
 //#define PORTUART       PORTC
 //init xmega usart:name and number USART,name PORT,number tx pin,number rx pin, speed,F_CPU
-void xmega_usart_init(USART_t *usart,PORT_t *port_name,uint8_t tx_pin_bm,uint8_t rx_pin_bm,uint32_t baud, uint32_t cpu_hz)
-{
-	port_name->DIRSET=tx_pin_bm;
-	port_name->OUTSET=tx_pin_bm;
-	port_name->DIRCLR=rx_pin_bm;
-usart_set_baudrate(usart,baud,cpu_hz);
-usart_format_set(usart,USART_CHSIZE_8BIT_gc,USART_PMODE_DISABLED_gc,0);
-usart_tx_enable(usart);
-usart_rx_enable(usart);
-}
+
 //Load number USART, speed and CPU_HZ
 //Edit before using (format_set ,enable/disable tx/rx)
 //  void usart_init(USART_t *usart,uint32_t baud, uint32_t cpu_hz)
@@ -31,6 +22,16 @@ usart_rx_enable(usart);
 // usart_rx_enable(usart);
 
 // }
+void xmega_usart_init(USART_t *usart,PORT_t *port_name,uint8_t tx_pin_bm,uint8_t rx_pin_bm,uint32_t baud, uint32_t cpu_hz)
+{
+	port_name->DIRSET=tx_pin_bm;
+	port_name->OUTSET=tx_pin_bm;
+	port_name->DIRCLR=rx_pin_bm;
+usart_set_baudrate(usart,baud,cpu_hz);
+usart_format_set(usart,USART_CHSIZE_8BIT_gc,USART_PMODE_DISABLED_gc,0);
+usart_tx_enable(usart);
+usart_rx_enable(usart);
+}
 /**
  *  Configure the USART frame format.
  *
@@ -172,7 +173,7 @@ static inline uint8_t usart_get(USART_t * usart)
 	
 	return ((uint8_t)(usart)->DATA);
 }
- void usart_putchar(USART_t *usart, uint16_t c)
+ void usart_putchar(USART_t *usart, uint8_t c)
 {
 	while (usart_data_register_is_empty(usart) == false) {
 	}
