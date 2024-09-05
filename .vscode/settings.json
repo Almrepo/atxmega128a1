@@ -1,0 +1,21 @@
+{
+    "AVR.reporter.arguments": [
+        "-C"
+    ],
+    "AVR.source.compiler": "/usr/bin/avr-gcc",
+    "AVR.programmer.tool": "/usr/bin/avrdude",
+    "AVR.programmer.definitions": "/etc/avrdude.conf",
+    "AVR.source.libraries": [
+        "/home/alm/work/avr/code/avr-vscode/atxmega128a1/inc",
+        "/usr/lib/avr/include",
+        "/usr/lib/avr/include/avr"
+    ],
+    "AVR.device.type": "atxmega128a1",
+    "AVR.device.frequency": 32000000,
+    "AVR.programmer.type": "avrispmkii",
+    "AVR.programmer.port": "usb",
+    "AVR.programmer.rate": 9600,
+    "C_Cpp.default.compilerPath": "/usr/bin/avr-g++",
+    
+    
+}
