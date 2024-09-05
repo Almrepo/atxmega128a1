@@ -1,9 +1,9 @@
 
 #include "usart.h"
 //Number tx/rx pin's for out and in
-#define PIN_TX         PIN3_bm
-#define PIN_RX         PIN2_bm
-#define PORTUART       PORTC
+//#define PIN_TX         PIN3_bm
+//#define PIN_RX         PIN2_bm
+//#define PORTUART       PORTC
 //init xmega usart:name and number USART,name PORT,number tx pin,number rx pin, speed,F_CPU
 void xmega_usart_init(USART_t *usart,PORT_t *port_name,uint8_t tx_pin_bm,uint8_t rx_pin_bm,uint32_t baud, uint32_t cpu_hz)
 {
