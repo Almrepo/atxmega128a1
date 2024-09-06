@@ -7,6 +7,6 @@
 #include <delay.h>
 #include "ds18b20.h"
 #include "ds1307.h"
+#include "xmega_usart.h"
 
-
-#endif 
+#endif
