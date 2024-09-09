@@ -38,21 +38,24 @@ int main()
 {
    uint8_t t_rtc[7];
 
-   uint8_t tx_buf[7] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+   uint8_t tx_buf[7] = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06};
    uint8_t tx_length[7];
    uint8_t data[2];
 
    setInternalClockTo32MHz();
    // xmega_usart_init(&USARTC0,&PORTC,PIN3_bm,PIN2_bm,9600,32000000);
    // usart_init(&USARTC0,9600,32000000UL);
-   XmegaUsart usart1(USARTC0, PORTC, PIN2_bm, PIN3_bm, 9600, 32000000);
+   XmegaUsart usartc0(&USARTC0, &PORTC, PIN3_bm, PIN2_bm, 9600, 32000000);
    ds1307_init(&TWIE);
-
+   usartc0.xmega_usart_putchar(&USARTC0, tx_buf[2]);
    // twi_send_msg(&TWIE,0xd0,tx_buf,6);
 
    while (1)
    {
 
+      for (uint8_t i = 0; i < 7; i++)
+
+         usartc0.xmega_usart_putchar(&USARTC0, tx_buf[i]);
       // twi_read_msg(&TWIE,0xd0,0x01,tx_length,1);
       _delay_ms(500);
 
@@ -64,8 +67,6 @@ int main()
       // usart_putchar(&USARTC0,sec);
 
       // twi_send_msg(&TWIE,0xd0,tx_buf,7);
-
-      _delay_ms(500);
 
       // twi_read_msg(&TWIE,0xd0,0x00,t_data,7);
 

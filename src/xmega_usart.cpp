@@ -1,20 +1,20 @@
 #include "xmega_usart.h"
 
-XmegaUsart::XmegaUsart(USART_t *usart, PORT_t *port_name, uint8_t tx_pin_bm, uint8_t rx_pin_bm, uint32_t baud, uint32_t cpu_hz)
-    : usart_(usart), port_name_(port_name), tx_pin_bm_(tx_pin_bm), rx_pin_bm_(rx_pin_bm), baud_(baud), cpu_hz_(cpu_hz)
+XmegaUsart::XmegaUsart(USART_t *usart_, PORT_t *port_name_, uint8_t tx_pin_bm_, uint8_t rx_pin_bm_, uint32_t baud_, uint32_t cpu_hz_)
+    : usart(usart_), port_name(port_name_), tx_pin_bm(tx_pin_bm_), rx_pin_bm(rx_pin_bm_), baud(baud_), cpu_hz(cpu_hz_)
 {
 
     xmega_usart_init();
 }
 void XmegaUsart::xmega_usart_init()
 {
-    PORT_t *port_name_DIRSET = tx_pin_bm_;
-    port_name_->OUTSET = tx_pin_bm_;
-    port_name_->DIRCLR = rx_pin_bm_;
-    usart_set_baudrate(usart_, baud_, cpu_hz_);
-    usart_format_set(usart_, USART_CHSIZE_8BIT_gc, USART_PMODE_DISABLED_gc, 0);
-    usart_tx_enable(usart_);
-    usart_rx_enable(usart_);
+    port_name->DIRSET = tx_pin_bm;
+    port_name->OUTSET = tx_pin_bm;
+    port_name->DIRCLR = rx_pin_bm;
+    xmega_usart_set_baudrate(usart, baud, cpu_hz);
+    xmega_usart_format_set(usart, USART_CHSIZE_8BIT_gc, USART_PMODE_DISABLED_gc, 0);
+    xmega_usart_tx_enable(usart);
+    xmega_usart_rx_enable(usart);
 }
 /**
  *  Configure the USART frame format.
@@ -26,13 +26,13 @@ void XmegaUsart::xmega_usart_init()
  *  \param parityMode The parity Mode. Use USART_PMODE_t type.
  *  \param twoStopBits Enable two stop bit mode. Use bool type.(1- enable 2 bit; 0-enable 1 bit)
  */
-void XmegaUsart::usart_format_set(USART_t *usart, USART_CHSIZE_t charSize, USART_PMODE_t parityMode, bool twoStopBits)
+void XmegaUsart::xmega_usart_format_set(USART_t *usart, USART_CHSIZE_t charSize, USART_PMODE_t parityMode, bool twoStopBits)
 {
     (usart)->CTRLC = (uint8_t)charSize | parityMode | (twoStopBits ? USART_SBMODE_bm : 0);
 }
 // Enable USART receiver.
 
-void XmegaUsart::usart_rx_enable(USART_t *usart)
+void XmegaUsart::xmega_usart_rx_enable(USART_t *usart)
 {
 
     (usart)->CTRLB |= USART_RXEN_bm;
@@ -40,14 +40,14 @@ void XmegaUsart::usart_rx_enable(USART_t *usart)
 
 // Disable USART receiver.
 
-void XmegaUsart::usart_rx_disable(USART_t *usart)
+void XmegaUsart::xmega_usart_rx_disable(USART_t *usart)
 {
     (usart)->CTRLB &= ~USART_RXEN_bm;
 }
 
 // Enable USART transmitter.
 
-void XmegaUsart::usart_tx_enable(USART_t *usart)
+void XmegaUsart::xmega_usart_tx_enable(USART_t *usart)
 {
 
     (usart)->CTRLB |= USART_TXEN_bm;
@@ -55,7 +55,7 @@ void XmegaUsart::usart_tx_enable(USART_t *usart)
 
 // Disable USART transmitter.
 
-void XmegaUsart::usart_tx_disable(USART_t *usart)
+void XmegaUsart::xmega_usart_tx_disable(USART_t *usart)
 {
     (usart)->CTRLB &= ~USART_TXEN_bm;
 }
@@ -64,8 +64,7 @@ void XmegaUsart::usart_tx_disable(USART_t *usart)
 // Sets the interrupt level on RX Complete interrupt.
 // param level Interrupt level of the RXD interrupt.
 
-void XmegaUsart::usart_set_rx_interrupt_level(USART_t *usart,
-                                              enum usart_int_level_t level)
+void XmegaUsart::xmega_usart_set_rx_interrupt_level(USART_t *usart, xmega_usart_int_level_t level)
 {
     (usart)->CTRLA = ((usart)->CTRLA & ~USART_RXCINTLVL_gm) |
                      (level << USART_RXCINTLVL_gp);
@@ -75,8 +74,8 @@ void XmegaUsart::usart_set_rx_interrupt_level(USART_t *usart,
 // Sets the interrupt level on TX Complete interrupt.
 // param level Interrupt level of the TXD interrupt.
 
-void XmegaUsart::usart_set_tx_interrupt_level(USART_t *usart,
-                                              enum usart_int_level_t level)
+void XmegaUsart::xmega_usart_set_tx_interrupt_level(USART_t *usart,
+                                                    xmega_usart_int_level_t level)
 {
     (usart)->CTRLA = ((usart)->CTRLA & ~USART_TXCINTLVL_gm) |
                      (level << USART_TXCINTLVL_gp);
@@ -87,8 +86,7 @@ void XmegaUsart::usart_set_tx_interrupt_level(USART_t *usart,
 // param level Interrupt level of the DRE interrupt.
 //              Use USART_DREINTLVL_t type.
 
-void XmegaUsart::usart_set_dre_interrupt_level(USART_t *usart,
-                                               enum usart_int_level_t level)
+void XmegaUsart::xmega_usart_set_dre_interrupt_level(USART_t *usart, xmega_usart_int_level_t level)
 {
     (usart)->CTRLA = ((usart)->CTRLA & ~USART_DREINTLVL_gm) |
                      (level << USART_DREINTLVL_gp);
@@ -96,7 +94,7 @@ void XmegaUsart::usart_set_dre_interrupt_level(USART_t *usart,
 
 // Check if data register empty flag is set.
 
-bool XmegaUsart::usart_data_register_is_empty(USART_t *usart)
+bool XmegaUsart::xmega_usart_data_register_is_empty(USART_t *usart)
 {
     return (usart)->STATUS & USART_DREIF_bm;
 }
@@ -104,7 +102,7 @@ bool XmegaUsart::usart_data_register_is_empty(USART_t *usart)
 // Checks if the RX complete interrupt flag is set.
 // Checks if the RX complete interrupt flag is set.
 
-bool XmegaUsart::usart_rx_is_complete(USART_t *usart)
+bool XmegaUsart::xmega_usart_rx_is_complete(USART_t *usart)
 {
     return (usart)->STATUS & USART_RXCIF_bm;
 }
@@ -112,21 +110,21 @@ bool XmegaUsart::usart_rx_is_complete(USART_t *usart)
 // Checks if the TX complete interrupt flag is set.
 // Checks if the TX complete interrupt flag is set.
 
-bool XmegaUsart::usart_tx_is_complete(USART_t *usart)
+bool XmegaUsart::xmega_usart_tx_is_complete(USART_t *usart)
 {
     return (usart)->STATUS & USART_TXCIF_bm;
 }
 
 // Clear TX complete interrupt flag.
 
-void XmegaUsart::usart_clear_tx_complete(USART_t *usart)
+void XmegaUsart::xmega_usart_clear_tx_complete(USART_t *usart)
 {
     (usart)->STATUS = USART_TXCIF_bm;
 }
 
 // Clear RX complete interrupt flag.
 
-void XmegaUsart::usart_clear_rx_complete(USART_t *usart)
+void XmegaUsart::xmega_usart_clear_rx_complete(USART_t *usart)
 {
     (usart)->STATUS = USART_RXCIF_bm;
 }
@@ -134,7 +132,7 @@ void XmegaUsart::usart_clear_rx_complete(USART_t *usart)
 // Write a data to the USART data register.
 // param txdata The data to be transmitted.
 
-void XmegaUsart::usart_put(USART_t *usart, uint8_t txdata)
+void XmegaUsart::xmega_usart_put(USART_t *usart, uint8_t txdata)
 {
     (usart)->DATA = txdata;
 }
@@ -142,22 +140,22 @@ void XmegaUsart::usart_put(USART_t *usart, uint8_t txdata)
 // Read a data to the USART data register.
 // return The received data
 
-uint8_t XmegaUsart::usart_get(USART_t *usart)
+uint8_t XmegaUsart::xmega_usart_get(USART_t *usart)
 {
     return (usart)->DATA;
 }
 
-uint8_t XmegaUsart::usart_getchar(USART_t *usart)
+uint8_t XmegaUsart::xmega_usart_getchar(USART_t *usart)
 {
-    while (usart_rx_is_complete(usart) == false)
+    while (xmega_usart_rx_is_complete(usart) == false)
     {
     }
 
     return ((uint8_t)(usart)->DATA);
 }
-void XmegaUsart::usart_putchar(USART_t *usart, uint8_t c)
+void XmegaUsart::xmega_usart_putchar(USART_t *usart, uint8_t c)
 {
-    while (usart_data_register_is_empty(usart) == false)
+    while (xmega_usart_data_register_is_empty(usart) == false)
     {
     }
 
@@ -176,7 +174,7 @@ void XmegaUsart::usart_putchar(USART_t *usart, uint8_t c)
  * \param bscale Calculated BSEL value.
  *
  */
-void XmegaUsart::usart_set_bsel_bscale_value(USART_t *usart, uint16_t bsel, uint8_t bscale)
+void XmegaUsart::xmega_usart_set_bsel_bscale_value(USART_t *usart, uint16_t bsel, uint8_t bscale)
 {
     (usart)->BAUDCTRLA = (uint8_t)(bsel);
     (usart)->BAUDCTRLB = (uint8_t)(((bsel >> 8) & 0X0F) | (bscale << 4));
@@ -234,7 +232,7 @@ void XmegaUsart::usart_set_bsel_bscale_value(USART_t *usart, uint16_t bsel, uint
  * \retval false if the hardware does not support the baud rate (i.e. it's
  *               either too high or too low.)
  */
-bool XmegaUsart::usart_set_baudrate(USART_t *usart, uint32_t baud, uint32_t cpu_hz)
+bool XmegaUsart::xmega_usart_set_baudrate(USART_t *usart, uint32_t baud, uint32_t cpu_hz)
 {
     int8_t exp;
     uint32_t div;

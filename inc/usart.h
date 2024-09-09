@@ -8,7 +8,7 @@ enum usart_int_level_t {
 	USART_INT_LVL_MED = 0x02,
 	USART_INT_LVL_HI = 0x03,
 };
-void xmega_usart_init(USART_t *usart,PORT_t *port_name,uint8_t tx_pin_bm,uint8_t rx_pin_bm,uint32_t baud, uint32_t cpu_hz);
+void usart_init(USART_t *usart,PORT_t *port_name,uint8_t tx_pin_bm,uint8_t rx_pin_bm,uint32_t baud, uint32_t cpu_hz);
 // void usart_init(USART_t *usart,uint32_t baud, uint32_t cpu_hz);
 static inline void usart_rx_enable(USART_t *usart);
 static inline void usart_rx_disable(USART_t *usart);

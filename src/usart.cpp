@@ -20,7 +20,7 @@
 // usart_rx_enable(usart);
 
 // }
-void xmega_usart_init(USART_t *usart, PORT_t *port_name, uint8_t tx_pin_bm, uint8_t rx_pin_bm, uint32_t baud, uint32_t cpu_hz)
+void usart_init(USART_t *usart, PORT_t *port_name, uint8_t tx_pin_bm, uint8_t rx_pin_bm, uint32_t baud, uint32_t cpu_hz)
 {
 	port_name->DIRSET = tx_pin_bm;
 	port_name->OUTSET = tx_pin_bm;
