@@ -3,7 +3,6 @@
 #define F_CPU 32000000UL
 #define READ_BIT 1
 #define WRITE_BIT 0
-
 // Функция для передачи данных по TWI
 
 // void TWI_MasterWrite(TWI_t*twi,uint8_t address, uint8_t* data, uint8_t bytes_to_send) {
@@ -45,20 +44,21 @@ int main()
    setInternalClockTo32MHz();
    // xmega_usart_init(&USARTC0,&PORTC,PIN3_bm,PIN2_bm,9600,32000000);
    // usart_init(&USARTC0,9600,32000000UL);
-   XmegaUsart usartc0(&USARTC0, &PORTC, PIN3_bm, PIN2_bm, 9600, 32000000);
+   // XmegaUsart usartc0(&USARTC0, &PORTC, PIN3_bm, PIN2_bm, 9600, 32000000);
    ds1307_init(&TWIE);
-   usartc0.xmega_usart_putchar(&USARTC0, tx_buf[2]);
+   XmegaUsart usartc0(&USARTC0, &PORTC, PIN3_bm, PIN2_bm, 9600, 32000000);
    // twi_send_msg(&TWIE,0xd0,tx_buf,6);
 
    while (1)
    {
 
       for (uint8_t i = 0; i < 7; i++)
-
-         usartc0.xmega_usart_putchar(&USARTC0, tx_buf[i]);
-      // twi_read_msg(&TWIE,0xd0,0x01,tx_length,1);
-      _delay_ms(500);
-
+      {
+         usartc0.xmega_usart_putchar(tx_buf[i]);
+         //    usartc0.xmega_usart_putchar(&USARTC0, tx_buf[i]);
+         // twi_read_msg(&TWIE,0xd0,0x01,tx_length,1);
+         _delay_ms(1000);
+      }
       // unsigned char chas = ((tx_length[2]>>4)*10+(0x0f&tx_length[2]));
       // uint8_t min = ((tx_length[1]>>4)*10+(0x0f&tx_length[1]));
       // unsigned char sec = ((tx_length[0]>>4)*10+(0x0f&tx_length[0]));
